@@ -1,0 +1,10 @@
+{
+  "name": "com.tarodev.filewatcher",
+  "displayName": "File Watcher",
+  "author": { "name": "Tarodev", "url": "https://www.youtube.com/tarodev" },
+  "version": "0.1.0",
+  "unity": "2022.3",
+  "description": "Compiles sass files into uss files on change.",
+  "keywords": [ "compiler", "sass", "scss", "uss" ],
+  "license": "MIT"
+}
