@@ -1,0 +1,53 @@
+.container {
+    padding: 10px;
+}
+
+.container > Label {
+    font-size: 19px;
+    margin-bottom: 20px;
+    -unity-font-style: bold;
+}
+
+.config-container {
+    padding: 5px;
+    margin-bottom: 10px;
+    border-width: 1px;
+    border-radius: 3px;
+    border-color: var(--unity-colors-app_toolbar-background);
+}
+
+.title-row {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.title-row Label {
+    margin-left: 5px;
+    font-size: 15px;
+}
+
+.title-row .error-label{
+    font-size: 10px;
+    flex-grow: 2;
+    -unity-text-align: middle-right;
+    white-space: normal;
+}
+
+.content-container{
+    margin-top:5px;
+}
+
+.field-row {
+    flex-direction: row;
+    justify-content: center;
+}
+
+.field-row Label {
+    width: 80px;
+}
+
+.field-row TextField {
+    flex-grow: 2;
+}
+
