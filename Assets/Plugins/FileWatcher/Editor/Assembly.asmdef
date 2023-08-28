@@ -2,7 +2,9 @@
     "name": "FileWatcherAssembly",
     "rootNamespace": "Tarodev.FileWatcher",
     "references": [],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
