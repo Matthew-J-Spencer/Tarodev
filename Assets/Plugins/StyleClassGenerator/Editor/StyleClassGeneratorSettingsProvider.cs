@@ -10,12 +10,12 @@ namespace Tarodev.StyleClassGenerator
     internal static class StyleClassGeneratorSettingsProvider
     {
         private const string SETTINGS_PATH = "Project/StyleClassGenerator";
-        private static StyleClassGeneratorConfig Config => StyleClassGeneratorScriptable.instance.Config;
-        private static readonly StyleClassGenerator Generator = new(StyleClassGeneratorScriptable.instance.Config);
 
         [SettingsProvider]
         public static SettingsProvider Create()
         {
+            var config = StyleClassGeneratorScriptable.instance.Config;
+
             var provider = new SettingsProvider(SETTINGS_PATH, SettingsScope.Project)
             {
                 label = "Style Class Generator",
@@ -31,16 +31,16 @@ namespace Tarodev.StyleClassGenerator
                     var saveBtn = new Button { text = "Save Changes" };
                     saveBtn.style.display = new StyleEnum<DisplayStyle>(DisplayStyle.None);
 
-                    var autoGenerateToggle = CreateFieldRow<bool, Toggle>("Auto Generate", Config.AutoGenerate);
+                    var autoGenerateToggle = CreateFieldRow<bool, Toggle>("Auto Generate", config.AutoGenerate);
                     container.Add(autoGenerateToggle.row);
 
-                    var outPutField = CreateFieldRow<string, TextField>("Output", Config.Output, "Leave blank to use root Assets/");
+                    var outPutField = CreateFieldRow<string, TextField>("Output", config.Output, "Leave blank to use root Assets/");
                     container.Add(outPutField.row);
 
-                    var nameSpaceField = CreateFieldRow<string, TextField>("Namespace", Config.Namespace, "Leave blank for no namespace");
+                    var nameSpaceField = CreateFieldRow<string, TextField>("Namespace", config.Namespace, "Leave blank for no namespace");
                     container.Add(nameSpaceField.row);
 
-                    var fileNameField = CreateFieldRow<string, TextField>("File Name", Config.FileName);
+                    var fileNameField = CreateFieldRow<string, TextField>("File Name", config.FileName);
                     container.Add(fileNameField.row);
 
                     container.Add(saveBtn);
@@ -55,17 +55,17 @@ namespace Tarodev.StyleClassGenerator
 
                             CleanUpIfPathChanged(newOutput, newFileName);
 
-                            Config.Output = newOutput;
+                            config.Output = newOutput;
                             outPutField.field.value = newOutput;
 
-                            Config.Namespace = newNamespace;
+                            config.Namespace = newNamespace;
                             nameSpaceField.field.value = newNamespace;
 
-                            Config.FileName = newFileName;
+                            config.FileName = newFileName;
                             fileNameField.field.value = newFileName;
 
                             StyleClassGeneratorScriptable.instance.Save();
-                            Generator.Generate();
+                            ReGenerate();
                             saveBtn.style.display = new StyleEnum<DisplayStyle>(DisplayStyle.None);
                         }
                         catch (Exception e)
@@ -94,7 +94,9 @@ namespace Tarodev.StyleClassGenerator
 
         private static void CleanUpIfPathChanged(string output, string fileName)
         {
-            var currentPath = StyleClassGeneratorShared.GeneratePathAndFileName(Config.Output, Config.FileName);
+            var config = StyleClassGeneratorScriptable.instance.Config;
+            
+            var currentPath = StyleClassGeneratorShared.GeneratePathAndFileName(config.Output, config.FileName);
             var newPath = StyleClassGeneratorShared.GeneratePathAndFileName(output, fileName);
 
             if (currentPath != newPath && File.Exists(currentPath))
@@ -133,6 +135,6 @@ namespace Tarodev.StyleClassGenerator
         private static void OpenSettings() => SettingsService.OpenProjectSettings(SETTINGS_PATH);
 
         [MenuItem("Tools/Style Class Generator/Generate")]
-        private static void ReGenerate() => Generator.Generate();
+        private static void ReGenerate() => new StyleClassGenerator(StyleClassGeneratorScriptable.instance.Config).Generate();
     }
 }
