@@ -12,7 +12,7 @@ namespace Tarodev.StyleClassGenerator
     {
         private readonly StyleClassGeneratorConfig _config;
         private const char CLASS_PREFIX = '.';
-        private static readonly char[] EndChars = { '.', ' ', '{', '\n', '\r' };
+        private static readonly char[] EndChars = { '.', ',', ' ', '{', '\n', '\r', ':', '>', '~', '+', '[' };
 
         public StyleClassGenerator(StyleClassGeneratorConfig config) => _config = config;
 
@@ -30,10 +30,12 @@ namespace Tarodev.StyleClassGenerator
                 while (streamReader.ReadLine() is { } line)
                 {
                     if (line.Length == 0) continue;
+                    if (line.StartsWith("@import")) continue;
 
                     for (var i = line.IndexOf(CLASS_PREFIX); i > -1; i = line.IndexOf(CLASS_PREFIX, i + 1))
                     {
                         var foundClassLine = line[(i + 1)..];
+                        if (char.IsNumber(foundClassLine[0])) continue; // To catch floating point number values
                         var endIndex = foundClassLine.IndexOfAny(EndChars);
                         foundClasses.Add(foundClassLine[..endIndex]);
                     }
