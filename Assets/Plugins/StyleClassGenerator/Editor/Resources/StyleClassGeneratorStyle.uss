@@ -1,0 +1,25 @@
+.container {
+    padding: 10px;
+}
+
+.container > Label {
+    font-size: 19px;
+    margin-bottom: 20px;
+    -unity-font-style: bold;
+}
+
+.field-row{
+    flex-direction: row;
+}
+
+.field-row Label{
+    width: 100px;
+}
+
+.field-row TextField{
+    flex-grow: 1;
+}
+
+Button{
+    margin: 10px 0 0 0;
+}

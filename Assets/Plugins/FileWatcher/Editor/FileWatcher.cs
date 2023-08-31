@@ -1,18 +1,18 @@
-﻿using System.Diagnostics;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using UnityEditor;
 
 namespace Tarodev.FileWatcher
 {
-    internal class FileWatcher : AssetPostprocessor
+    internal static class FileWatcher 
     {
-        private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
+        internal static void ProcessFiles(WatcherConfig settings, IEnumerable<string> assetPaths)
         {
             var directory = Directory.GetCurrentDirectory();
-            var settings = FileWatcherScriptable.instance;
 
-            foreach (var asset in importedAssets)
+            foreach (var asset in assetPaths)
             {
                 var split = asset.Split('.');
                 if (split.Length < 2) continue;

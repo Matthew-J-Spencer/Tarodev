@@ -34,7 +34,7 @@ namespace Tarodev.FileWatcher
                         return;
                     }
 
-                    var watchers = FileWatcherScriptable.instance.Watchers;
+                    var watchers = FileWatcherScriptable.instance.Config.Watchers;
                     foreach (var watcher in watchers)
                     {
                         container.Add(CreateWatcherContainer(watcher));
@@ -138,7 +138,7 @@ namespace Tarodev.FileWatcher
             return true;
         }
 
-        [MenuItem("File Watcher/Open Settings")]
+        [MenuItem("Tools/File Watcher Settings")]
         private static void OpenSettings() => SettingsService.OpenProjectSettings(SETTINGS_PATH);
     }
 }
