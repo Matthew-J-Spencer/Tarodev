@@ -20,7 +20,7 @@ namespace Tarodev.FileWatcher
                 {
                     rootElement.styleSheets.Add(Resources.Load<StyleSheet>("FileWatcherStyle"));
                     var container = new VisualElement();
-                    container.AddToClassList("container");
+                    container.AddToClassList(StyleClasses.Container);
                     rootElement.Add(container);
 
                     container.Add(new Label("File Watcher Settings"));
@@ -47,15 +47,15 @@ namespace Tarodev.FileWatcher
         private static VisualElement CreateWatcherContainer(WatcherBase watcher)
         {
             var installed = CheckInstall(watcher.ProgramName);
-            
+
             var configContainer = new VisualElement();
-            configContainer.AddToClassList("config-container");
+            configContainer.AddToClassList(StyleClasses.ConfigContainer);
 
             var contentContainer = new VisualElement();
-            contentContainer.AddToClassList("content-container");
+            contentContainer.AddToClassList(StyleClasses.ContentContainer);
 
             var titleRow = new VisualElement();
-            titleRow.AddToClassList("title-row");
+            titleRow.AddToClassList(StyleClasses.TitleRow);
             var enabledToggle = CreateField<bool, Toggle>(watcher.Enabled && installed, b =>
             {
                 watcher.Enabled = b;
@@ -69,15 +69,16 @@ namespace Tarodev.FileWatcher
             if (!installed)
             {
                 var errorLabel = new Label($"{watcher.Name} is not installed. Run: {watcher.InstallCommand}");
-                errorLabel.AddToClassList("error-label");
+                errorLabel.AddToClassList(StyleClasses.ErrorLabel);
                 titleRow.Add(errorLabel);
-                
+
                 enabledToggle.SetEnabled(false);
                 if (watcher.Enabled)
                 {
                     watcher.Enabled = false;
                     FileWatcherScriptable.instance.Save();
                 }
+
                 return configContainer;
             }
 
@@ -98,7 +99,7 @@ namespace Tarodev.FileWatcher
             VisualElement CreateFieldRow(string label, VisualElement field, string tooltip = null)
             {
                 var row = new VisualElement() { tooltip = tooltip };
-                row.AddToClassList("field-row");
+                row.AddToClassList(StyleClasses.FieldRow);
                 row.Add(new Label(label));
                 row.Add(field);
                 return row;

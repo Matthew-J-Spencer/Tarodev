@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using UnityEngine;
 
 namespace Tarodev.StyleClassGenerator
 {
@@ -9,9 +10,9 @@ namespace Tarodev.StyleClassGenerator
 
         internal static string GeneratePathAndFileName(string directory, string fileName)
         {
-            var newDirectory = $"{Directory.GetCurrentDirectory()}/Assets/{directory}";
+            var newDirectory = $"{Application.dataPath}/{directory}";
             var newFileName = string.IsNullOrEmpty(fileName) ? DEFAULT_FILE_NAME : fileName;
-            return $"{newDirectory}/{newFileName}.cs";
+            return $"{newDirectory}/{newFileName}.Gen.cs";
         }
     }
 }

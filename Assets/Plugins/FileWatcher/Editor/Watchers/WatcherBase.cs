@@ -9,7 +9,7 @@ namespace Tarodev.FileWatcher
         public bool Enabled;
         public string Arguments;
         public string OutputPath;
-        
+
         protected virtual string CreateOutputPath(string assetPath)
         {
             return string.IsNullOrEmpty(OutputPath) ? assetPath : $"{Directory.GetCurrentDirectory()}/Assets/{OutputPath}/{Path.GetFileName(assetPath)}";
@@ -21,4 +21,4 @@ namespace Tarodev.FileWatcher
         public abstract string Name { get; }
         public abstract string InstallCommand { get; }
     }
-} 
+}

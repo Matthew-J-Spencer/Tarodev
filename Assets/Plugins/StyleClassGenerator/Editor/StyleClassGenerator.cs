@@ -10,81 +10,86 @@ namespace Tarodev.StyleClassGenerator
 {
     internal class StyleClassGenerator
     {
-        private readonly StyleClassGeneratorConfig _config;
+        private readonly List<StyleClassGeneratorConfig> _configs;
         private const char CLASS_PREFIX = '.';
         private static readonly char[] EndChars = { '.', ',', ' ', '{', '\n', '\r', ':', '>', '~', '+', '[' };
 
-        public StyleClassGenerator(StyleClassGeneratorConfig config) => _config = config;
+        public StyleClassGenerator(List<StyleClassGeneratorConfig> configs) => _configs = configs;
 
         internal void Generate()
         {
-            var ussFiles = Directory.GetFiles(Application.dataPath, "*.uss", SearchOption.AllDirectories);
-
-            var foundClasses = new HashSet<string>();
-            foreach (var asset in ussFiles)
+            foreach (var config in _configs)
             {
-                if (Path.GetExtension(asset).Replace(".", "") != StyleClassGeneratorShared.USS_EXTENSION) continue;
+                var targetDirectory = $"{Application.dataPath}/{config.TargetDirectory}";
 
-                using var fileStream = File.OpenRead(asset);
-                using var streamReader = new StreamReader(fileStream, Encoding.UTF8, true);
-                while (streamReader.ReadLine() is { } line)
+                var ussFiles = Directory.GetFiles(targetDirectory, "*.uss", SearchOption.AllDirectories);
+
+                var foundClasses = new HashSet<string>();
+                foreach (var asset in ussFiles)
                 {
-                    if (line.Length == 0) continue;
-                    if (line.StartsWith("@import")) continue;
+                    if (Path.GetExtension(asset).Replace(".", "") != StyleClassGeneratorShared.USS_EXTENSION) continue;
 
-                    for (var i = line.IndexOf(CLASS_PREFIX); i > -1; i = line.IndexOf(CLASS_PREFIX, i + 1))
+                    using var fileStream = File.OpenRead(asset);
+                    using var streamReader = new StreamReader(fileStream, Encoding.UTF8, true);
+                    while (streamReader.ReadLine() is { } line)
                     {
-                        var foundClassLine = line[(i + 1)..];
-                        if (char.IsNumber(foundClassLine[0])) continue; // To catch floating point number values
-                        var endIndex = foundClassLine.IndexOfAny(EndChars);
-                        foundClasses.Add(foundClassLine[..endIndex]);
+                        if (line.Length == 0) continue;
+                        if (line.StartsWith("@import")) continue;
+
+                        for (var i = line.IndexOf(CLASS_PREFIX); i > -1; i = line.IndexOf(CLASS_PREFIX, i + 1))
+                        {
+                            var foundClassLine = line[(i + 1)..];
+                            if (char.IsNumber(foundClassLine[0])) continue; // To catch floating point number values
+                            var endIndex = foundClassLine.IndexOfAny(EndChars);
+                            foundClasses.Add(foundClassLine[..endIndex]);
+                        }
                     }
                 }
-            }
 
-            var generatedFileName = StyleClassGeneratorShared.GeneratePathAndFileName(_config.Output, _config.FileName);
+                var generatedFileName = StyleClassGeneratorShared.GeneratePathAndFileName(config.TargetDirectory, config.FileName);
 
-            if (File.Exists(generatedFileName))
-            {
-                if (IsIdentical()) return;
-                WriteFile(GenerateFileContents(foundClasses));
-            }
-            else
-            {
-                WriteFile(GenerateFileContents(foundClasses));
-            }
-
-            void WriteFile(string content)
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(generatedFileName) ?? string.Empty);
-                using (var fs = File.Create(generatedFileName))
+                if (File.Exists(generatedFileName))
                 {
-                    var info = new UTF8Encoding(true).GetBytes(content);
-                    fs.Write(info, 0, info.Length);
+                    if (IsIdentical()) return;
+                    WriteFile(GenerateFileContents(config, foundClasses));
+                }
+                else
+                {
+                    WriteFile(GenerateFileContents(config, foundClasses));
                 }
 
-                AssetDatabase.Refresh();
-            }
+                void WriteFile(string content)
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(generatedFileName) ?? string.Empty);
+                    using (var fs = File.Create(generatedFileName))
+                    {
+                        var info = new UTF8Encoding(true).GetBytes(content);
+                        fs.Write(info, 0, info.Length);
+                    }
 
-            bool IsIdentical()
-            {
-                try
-                {
-                    var currentClasses = File.ReadLines(generatedFileName).Skip(1).First()[2..].Split(',').ToHashSet();
-                    return currentClasses.SetEquals(foundClasses);
+                    AssetDatabase.Refresh();
                 }
-                catch (Exception)
+
+                bool IsIdentical()
                 {
-                    Debug.LogWarning("A parsing error occured. Regenerating file.");
-                    return false;
+                    try
+                    {
+                        var currentClasses = File.ReadLines(generatedFileName).Skip(1).First()[2..].Split(',').ToHashSet();
+                        return currentClasses.SetEquals(foundClasses);
+                    }
+                    catch (Exception)
+                    {
+                        Debug.LogWarning("A parsing error occured. Regenerating file.");
+                        return false;
+                    }
                 }
             }
         }
 
-        private string GenerateFileContents(HashSet<string> classNames)
+        private static string GenerateFileContents(StyleClassGeneratorConfig config, HashSet<string> classNames)
         {
             var classNamesSplitByComma = string.Join(",", classNames);
-            var useNamespaces = !string.IsNullOrEmpty(_config.Namespace);
+            var useNamespaces = !string.IsNullOrEmpty(config.Namespace);
             var builder = new StringBuilder();
             var tabCount = 0;
 
@@ -96,11 +101,11 @@ namespace Tarodev.StyleClassGenerator
 
             if (useNamespaces)
             {
-                AddLine($"namespace {_config.Namespace}");
+                AddLine($"namespace {config.Namespace}");
                 AddLine("{");
             }
 
-            AddLine($"public static class {StyleClassGeneratorShared.DEFAULT_FILE_NAME}");
+            AddLine($"public static class {(string.IsNullOrEmpty(config.FileName) ? StyleClassGeneratorShared.DEFAULT_FILE_NAME : config.FileName)}");
             AddLine("{");
 
             foreach (var className in classNames)

@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Tarodev.FileWatcher
 {
-    internal static class FileWatcher 
+    internal static class FileWatcher
     {
         internal static void ProcessFiles(WatcherConfig settings, IEnumerable<string> assetPaths)
         {

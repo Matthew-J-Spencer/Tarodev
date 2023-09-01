@@ -20,7 +20,7 @@ namespace Tarodev.FileWatcher
             return $"\"{assetPath}.{ext}\" -o \"{outputPath}\" {Arguments} && ren \"{outputPath}/{fileName}.css\" \"{fileName}.uss\"";
         }
 
-        public override string[] SupportedExtensions => new []{"styl"};
+        public override string[] SupportedExtensions => new[] { "styl" };
         public override string ProgramName => "stylus";
         public override string Name => "Stylus";
         public override string InstallCommand => "npm install -g stylus";

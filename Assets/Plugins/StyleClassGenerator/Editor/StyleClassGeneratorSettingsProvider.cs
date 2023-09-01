@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
@@ -14,90 +15,140 @@ namespace Tarodev.StyleClassGenerator
         [SettingsProvider]
         public static SettingsProvider Create()
         {
-            var config = StyleClassGeneratorScriptable.instance.Config;
-
             var provider = new SettingsProvider(SETTINGS_PATH, SettingsScope.Project)
             {
                 label = "Style Class Generator",
-                activateHandler = (_, rootElement) =>
-                {
-                    rootElement.styleSheets.Add(Resources.Load<StyleSheet>("StyleClassGeneratorStyle"));
-                    var container = new VisualElement();
-                    container.AddToClassList("container");
-                    rootElement.Add(container);
-
-                    container.Add(new Label("Style Class Generator Settings"));
-
-                    var saveBtn = new Button { text = "Save Changes" };
-                    saveBtn.style.display = new StyleEnum<DisplayStyle>(DisplayStyle.None);
-
-                    var autoGenerateToggle = CreateFieldRow<bool, Toggle>("Auto Generate", config.AutoGenerate);
-                    container.Add(autoGenerateToggle.row);
-
-                    var outPutField = CreateFieldRow<string, TextField>("Output", config.Output, "Leave blank to use root Assets/");
-                    container.Add(outPutField.row);
-
-                    var nameSpaceField = CreateFieldRow<string, TextField>("Namespace", config.Namespace, "Leave blank for no namespace");
-                    container.Add(nameSpaceField.row);
-
-                    var fileNameField = CreateFieldRow<string, TextField>("File Name", config.FileName);
-                    container.Add(fileNameField.row);
-
-                    container.Add(saveBtn);
-
-                    saveBtn.clicked += () =>
-                    {
-                        try
-                        {
-                            var newOutput = SanitizeDirectoryPath(outPutField.field.value);
-                            var newNamespace = Sanitize(nameSpaceField.field.value, '.');
-                            var newFileName = Sanitize(fileNameField.field.value);
-
-                            CleanUpIfPathChanged(newOutput, newFileName);
-
-                            config.Output = newOutput;
-                            outPutField.field.value = newOutput;
-
-                            config.Namespace = newNamespace;
-                            nameSpaceField.field.value = newNamespace;
-
-                            config.FileName = newFileName;
-                            fileNameField.field.value = newFileName;
-
-                            StyleClassGeneratorScriptable.instance.Save();
-                            ReGenerate();
-                            saveBtn.style.display = new StyleEnum<DisplayStyle>(DisplayStyle.None);
-                        }
-                        catch (Exception e)
-                        {
-                            Debug.LogError(e);
-                        }
-                    };
-
-                    (VisualElement row, TField field) CreateFieldRow<TValue, TField>(string label, TValue value, string tooltip = null) where TField : BaseField<TValue>, new()
-                    {
-                        var row = new VisualElement() { tooltip = tooltip };
-                        row.AddToClassList("field-row");
-                        row.Add(new Label(label));
-
-                        var field = new TField { value = value };
-
-                        field.RegisterValueChangedCallback(e => saveBtn.style.display = new StyleEnum<DisplayStyle>(DisplayStyle.Flex));
-
-                        row.Add(field);
-                        return (row, field);
-                    }
-                }
+                activateHandler = (_, rootElement) => { CreateInterface(rootElement); }
             };
             return provider;
         }
 
-        private static void CleanUpIfPathChanged(string output, string fileName)
+        private static void CreateInterface(VisualElement rootElement)
         {
-            var config = StyleClassGeneratorScriptable.instance.Config;
-            
-            var currentPath = StyleClassGeneratorShared.GeneratePathAndFileName(config.Output, config.FileName);
-            var newPath = StyleClassGeneratorShared.GeneratePathAndFileName(output, fileName);
+            rootElement.Clear();
+            rootElement.styleSheets.Add(Resources.Load<StyleSheet>("StyleClassGeneratorStyle"));
+
+            var settings = StyleClassGeneratorScriptable.instance;
+            var configs = settings.Configs;
+
+            // var autoGenerateToggle = new Toggle(){value = settings.AutoGenerate,label = "Auto Generate"};
+            // autoGenerateToggle.RegisterValueChangedCallback(e =>
+            // {
+            //     settings.AutoGenerate = e.newValue;
+            //     StyleClassGeneratorScriptable.instance.Save();
+            // });
+            //
+            // rootElement.Add(autoGenerateToggle);
+
+            var container = new VisualElement();
+            container.AddToClassList(StyleClasses.Container);
+            rootElement.Add(container);
+
+            container.Add(new Label("Style Class Generator Settings"));
+
+            var scroll = new ScrollView(ScrollViewMode.Vertical);
+            container.Add(scroll);
+
+
+            foreach (var config in configs)
+            {
+                var configBox = new VisualElement();
+                configBox.AddToClassList(StyleClasses.ConfigBox);
+                scroll.Add(configBox);
+
+                var saveBtn = new Button { text = "Save Changes" };
+                saveBtn.style.display = new StyleEnum<DisplayStyle>(DisplayStyle.None);
+
+                var targetDirectoryField = CreateFieldRow<string, TextField>("Target Directory", config.TargetDirectory, "Leave blank to use root Assets/");
+                configBox.Add(targetDirectoryField.row);
+
+                var nameSpaceField = CreateFieldRow<string, TextField>("Namespace", config.Namespace, "Leave blank for no namespace");
+                configBox.Add(nameSpaceField.row);
+
+                var fileNameField = CreateFieldRow<string, TextField>("File Name", config.FileName);
+                configBox.Add(fileNameField.row);
+
+                configBox.Add(saveBtn);
+
+                saveBtn.clicked += () =>
+                {
+                    try
+                    {
+                        var newTargetDirectory = SanitizeDirectoryPath(targetDirectoryField.field.value);
+                        var newNamespace = Sanitize(nameSpaceField.field.value, '.');
+                        var newFileName = Sanitize(fileNameField.field.value);
+
+                        CleanUpIfPathChanged(config, newTargetDirectory, newFileName);
+
+                        config.TargetDirectory = newTargetDirectory;
+                        targetDirectoryField.field.value = newTargetDirectory;
+
+                        config.Namespace = newNamespace;
+                        nameSpaceField.field.value = newNamespace;
+
+                        config.FileName = newFileName;
+                        fileNameField.field.value = newFileName;
+
+                        StyleClassGeneratorScriptable.instance.Save();
+                        ReGenerate();
+                        saveBtn.style.display = new StyleEnum<DisplayStyle>(DisplayStyle.None);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError(e);
+                    }
+                };
+
+                (VisualElement row, TField field) CreateFieldRow<TValue, TField>(string label, TValue value, string tooltip = null) where TField : BaseField<TValue>, new()
+                {
+                    var row = new VisualElement() { tooltip = tooltip };
+                    row.AddToClassList(StyleClasses.FieldRow);
+                    row.Add(new Label(label));
+
+                    var field = new TField { value = value };
+
+                    field.RegisterValueChangedCallback(e => saveBtn.style.display = new StyleEnum<DisplayStyle>(DisplayStyle.Flex));
+
+                    row.Add(field);
+                    return (row, field);
+                }
+            }
+
+            var filler = new VisualElement();
+            filler.AddToClassList(StyleClasses.Filler);
+            container.Add(filler);
+
+            var btnRow = new VisualElement();
+            btnRow.AddToClassList(StyleClasses.BtnRow);
+            container.Add(btnRow);
+
+            var newRowButton = new Button(() =>
+            {
+                configs.Add(new StyleClassGeneratorConfig());
+                StyleClassGeneratorScriptable.instance.Save();
+                CreateInterface(rootElement);
+            }) { text = "Add new configuration" };
+            btnRow.Add(newRowButton);
+
+            if (configs.Count > 1)
+            {
+                var removeRowButton = new Button(() =>
+                {
+                    configs.Remove(configs.Last());
+                    StyleClassGeneratorScriptable.instance.Save();
+                    CreateInterface(rootElement);
+                }) { text = "Remove last configuration" };
+                btnRow.Add(removeRowButton);
+            }
+
+            var generateButton = new Button(ReGenerate) { text = "Generate" };
+            container.Add(generateButton);
+        }
+
+        private static void CleanUpIfPathChanged(StyleClassGeneratorConfig config, string targetDirectory, string fileName)
+        {
+            var currentPath = StyleClassGeneratorShared.GeneratePathAndFileName(config.TargetDirectory, config.FileName);
+            var newPath = StyleClassGeneratorShared.GeneratePathAndFileName(targetDirectory, fileName);
 
             if (currentPath != newPath && File.Exists(currentPath))
             {
@@ -120,7 +171,7 @@ namespace Tarodev.StyleClassGenerator
 
         private static string SanitizeDirectoryPath(string path)
         {
-            var sanitized = Regex.Replace(path, "[<>:\"|?* ]", "_");
+            var sanitized = Regex.Replace(path, "[<>:\"|?*]", "_");
 
             if (string.IsNullOrEmpty(sanitized)) return string.Empty;
 
@@ -135,6 +186,6 @@ namespace Tarodev.StyleClassGenerator
         private static void OpenSettings() => SettingsService.OpenProjectSettings(SETTINGS_PATH);
 
         [MenuItem("Tools/Style Class Generator/Generate")]
-        private static void ReGenerate() => new StyleClassGenerator(StyleClassGeneratorScriptable.instance.Config).Generate();
+        private static void ReGenerate() => new StyleClassGenerator(StyleClassGeneratorScriptable.instance.Configs).Generate();
     }
 }

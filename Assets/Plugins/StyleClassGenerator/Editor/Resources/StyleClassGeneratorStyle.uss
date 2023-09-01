@@ -1,5 +1,6 @@
 .container {
     padding: 10px;
+    height: 100%;
 }
 
 .container > Label {
@@ -8,18 +9,43 @@
     -unity-font-style: bold;
 }
 
-.field-row{
+.config-box {
+    margin: 10px;
+    border-width: 1px;
+    border-radius: 5px;
+    background-color: var(--unity-colors-alternated_rows-background);
+    padding: 10px;
+}
+
+.field-row {
     flex-direction: row;
 }
 
-.field-row Label{
+.field-row Label {
     width: 100px;
 }
 
-.field-row TextField{
+.field-row TextField {
     flex-grow: 1;
 }
 
-Button{
-    margin: 10px 0 0 0;
+.filler {
+    flex-grow: 1;
+}
+
+.unity-scroll-view__content-viewport {
+    margin-right: 10px;
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: var(--unity-colors-app_toolbar-background);
+}
+
+.btn-row {
+    flex-direction: row;
+    margin: 5px 0;
+}
+
+.btn-row Button {
+    flex-grow: 1;
+    height: 20px;
 }
