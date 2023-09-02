@@ -10,10 +10,9 @@ namespace Tarodev.StyleClassGenerator
         private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
         {
             if (!StyleClassGeneratorScriptable.instance) return;
-            if (!StyleClassGeneratorScriptable.instance.AutoGenerate) return;
             var combined = importedAssets.Concat(deletedAssets);
             if (!combined.Any(i => i.EndsWith(StyleClassGeneratorShared.USS_EXTENSION))) return;
-            Generator.Generate();
+            Generator.Generate(isAutoGenerating:true);
         }
     }
 }

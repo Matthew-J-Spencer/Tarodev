@@ -20,7 +20,7 @@ namespace Tarodev.FileWatcher
                 {
                     rootElement.styleSheets.Add(Resources.Load<StyleSheet>("FileWatcherStyle"));
                     var container = new VisualElement();
-                    container.AddToClassList(StyleClasses.Container);
+                    container.AddToClassList(Styles.Container);
                     rootElement.Add(container);
 
                     container.Add(new Label("File Watcher Settings"));
@@ -49,13 +49,13 @@ namespace Tarodev.FileWatcher
             var installed = CheckInstall(watcher.ProgramName);
 
             var configContainer = new VisualElement();
-            configContainer.AddToClassList(StyleClasses.ConfigContainer);
+            configContainer.AddToClassList(Styles.ConfigContainer);
 
             var contentContainer = new VisualElement();
-            contentContainer.AddToClassList(StyleClasses.ContentContainer);
+            contentContainer.AddToClassList(Styles.ContentContainer);
 
             var titleRow = new VisualElement();
-            titleRow.AddToClassList(StyleClasses.TitleRow);
+            titleRow.AddToClassList(Styles.TitleRow);
             var enabledToggle = CreateField<bool, Toggle>(watcher.Enabled && installed, b =>
             {
                 watcher.Enabled = b;
@@ -69,7 +69,7 @@ namespace Tarodev.FileWatcher
             if (!installed)
             {
                 var errorLabel = new Label($"{watcher.Name} is not installed. Run: {watcher.InstallCommand}");
-                errorLabel.AddToClassList(StyleClasses.ErrorLabel);
+                errorLabel.AddToClassList(Styles.ErrorLabel);
                 titleRow.Add(errorLabel);
 
                 enabledToggle.SetEnabled(false);
@@ -99,7 +99,7 @@ namespace Tarodev.FileWatcher
             VisualElement CreateFieldRow(string label, VisualElement field, string tooltip = null)
             {
                 var row = new VisualElement() { tooltip = tooltip };
-                row.AddToClassList(StyleClasses.FieldRow);
+                row.AddToClassList(Styles.FieldRow);
                 row.Add(new Label(label));
                 row.Add(field);
                 return row;

@@ -12,35 +12,34 @@ namespace Tarodev.StyleClassGenerator
     internal class StyleClassGenerator
     {
         private readonly List<StyleClassGeneratorConfig> _configs;
-        private const char CLASS_PREFIX = '.';
-        private static readonly char[] EndChars = { '.', ',', ' ', '{', '\n', '\r', ':', '>', '~', '+', '[' };
-
+        private const string CLASS_PATTERN = @"(?<![0-9])\.([a-zA-Z_][a-zA-Z0-9_\-]*)(?=[\s\.\{\:\#\,])";
+        private const string UNITY_CLASS_PREFIX = "unity-";
         public StyleClassGenerator(List<StyleClassGeneratorConfig> configs) => _configs = configs;
 
-        internal void Generate()
+        internal void Generate(bool isAutoGenerating)
         {
             foreach (var config in _configs)
             {
+                if (isAutoGenerating && !config.AutoGenerate) continue;
+
                 var targetDirectory = $"{Application.dataPath}/{config.TargetDirectory}";
 
                 var ussFiles = Directory.GetFiles(targetDirectory, "*.uss", SearchOption.AllDirectories);
 
                 var foundClasses = new HashSet<string>();
-                
-                
-           
-                
+
                 foreach (var asset in ussFiles)
                 {
                     if (Path.GetExtension(asset).Replace(".", "") != StyleClassGeneratorShared.USS_EXTENSION) continue;
 
-                    const string PATTERN = @"\.([a-zA-Z0-9_\-]+)\s*{";
-                    var fileContent = File.ReadAllText(asset);  
-                    var matches = Regex.Matches(fileContent, PATTERN);
+                    var fileContent = File.ReadAllText(asset);
+                    var matches = Regex.Matches(fileContent, CLASS_PATTERN);
 
                     foreach (Match match in matches)
                     {
                         var className = match.Groups[1].Value;
+                        if (className.StartsWith(UNITY_CLASS_PREFIX) && !config.IncludeUnityClasses) continue;
+
                         foundClasses.Add(className);
                     }
                 }

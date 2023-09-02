@@ -4,7 +4,7 @@
 // ReSharper disable All
 namespace Tarodev.FileWatcher
 {
-	public static class StyleClasses
+	public static class Styles
 	{
 		public const string Container = "container";
 		public const string ConfigContainer = "config-container";

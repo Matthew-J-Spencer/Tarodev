@@ -41,7 +41,7 @@ namespace Tarodev.StyleClassGenerator
             // rootElement.Add(autoGenerateToggle);
 
             var container = new VisualElement();
-            container.AddToClassList(StyleClasses.Container);
+            container.AddToClassList(Styles.Container);
             rootElement.Add(container);
 
             container.Add(new Label("Style Class Generator Settings"));
@@ -52,7 +52,7 @@ namespace Tarodev.StyleClassGenerator
             foreach (var config in configs)
             {
                 var configBox = new VisualElement();
-                configBox.AddToClassList(StyleClasses.ConfigBox);
+                configBox.AddToClassList(Styles.ConfigBox);
                 scroll.Add(configBox);
 
                 var saveBtn = new Button { text = "Save Changes" };
@@ -66,6 +66,12 @@ namespace Tarodev.StyleClassGenerator
 
                 var fileNameField = CreateFieldRow<string, TextField>("File Name", config.FileName);
                 configBox.Add(fileNameField.row);
+
+                var autoGenerateField = CreateFieldRow<bool, Toggle>("Autogenerate", config.AutoGenerate, "If true, the file will be generated automatically when a .uss file is altered");
+                configBox.Add(autoGenerateField.row);
+
+                var includeUnityClassesField = CreateFieldRow<bool, Toggle>("Include Unity Classes", config.IncludeUnityClasses, "Exclude built-in classes which start with 'unity-'");
+                configBox.Add(includeUnityClassesField.row);
 
                 configBox.Add(saveBtn);
 
@@ -87,6 +93,9 @@ namespace Tarodev.StyleClassGenerator
 
                         config.FileName = newFileName;
                         fileNameField.field.value = newFileName;
+                        
+                        config.AutoGenerate = autoGenerateField.field.value;
+                        autoGenerateField.field.value = config.AutoGenerate;
 
                         StyleClassGeneratorScriptable.instance.Save();
                         ReGenerate();
@@ -101,7 +110,7 @@ namespace Tarodev.StyleClassGenerator
                 (VisualElement row, TField field) CreateFieldRow<TValue, TField>(string label, TValue value, string tooltip = null) where TField : BaseField<TValue>, new()
                 {
                     var row = new VisualElement() { tooltip = tooltip };
-                    row.AddToClassList(StyleClasses.FieldRow);
+                    row.AddToClassList(Styles.FieldRow);
                     row.Add(new Label(label));
 
                     var field = new TField { value = value };
@@ -114,11 +123,11 @@ namespace Tarodev.StyleClassGenerator
             }
 
             var filler = new VisualElement();
-            filler.AddToClassList(StyleClasses.Filler);
+            filler.AddToClassList(Styles.Filler);
             container.Add(filler);
 
             var btnRow = new VisualElement();
-            btnRow.AddToClassList(StyleClasses.BtnRow);
+            btnRow.AddToClassList(Styles.BtnRow);
             container.Add(btnRow);
 
             var newRowButton = new Button(() =>
@@ -185,6 +194,6 @@ namespace Tarodev.StyleClassGenerator
         private static void OpenSettings() => SettingsService.OpenProjectSettings(SETTINGS_PATH);
 
         [MenuItem("Tools/Style Class Generator/Generate")]
-        private static void ReGenerate() => new StyleClassGenerator(StyleClassGeneratorScriptable.instance.Configs).Generate();
+        private static void ReGenerate() => new StyleClassGenerator(StyleClassGeneratorScriptable.instance.Configs).Generate(isAutoGenerating: false);
     }
 }

@@ -22,7 +22,7 @@
 }
 
 .field-row Label {
-    width: 110px;
+    width: 130px;
 }
 
 .field-row TextField {
