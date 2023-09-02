@@ -5,15 +5,12 @@
     "name": "Tarodev",
     "url": "https://www.youtube.com/tarodev"
   },
-  "version": "0.1.2",
+  "version": "0.1.3",
   "unity": "2022.3",
   "description": "Checks for USS classes in stylesheets and generates strongly-typed constants.",
   "keywords": [
     "generator",
     "uss"
   ],
-  "dependencies": {
-    "com.tarodev.shared": "https://github.com/Matthew-J-Spencer/Tarodev.git?path=Assets/Plugins/Shared"
-  },
   "license": "MIT"
 }
