@@ -1,9 +1,7 @@
 {
     "name": "StyleClassGeneratorAssembly",
     "rootNamespace": "Tarodev.StyleClassGenerator",
-    "references": [
-        "GUID:50b30f1c06ebd4d42bf290173c9d94b9"
-    ],
+    "references": [],
     "includePlatforms": [
         "Editor"
     ],
