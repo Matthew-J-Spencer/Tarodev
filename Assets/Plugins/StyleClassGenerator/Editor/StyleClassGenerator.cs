@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Tarodev.Shared;
 using UnityEditor;
 using UnityEngine;
 
@@ -18,6 +19,7 @@ namespace Tarodev.StyleClassGenerator
 
         internal void Generate()
         {
+            SharedScript.SaySomething();
             foreach (var config in _configs)
             {
                 var targetDirectory = $"{Application.dataPath}/{config.TargetDirectory}";

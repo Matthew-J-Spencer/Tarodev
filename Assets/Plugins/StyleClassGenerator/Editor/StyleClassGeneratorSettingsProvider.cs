@@ -10,7 +10,7 @@ namespace Tarodev.StyleClassGenerator
 {
     internal static class StyleClassGeneratorSettingsProvider
     {
-        private const string SETTINGS_PATH = "Project/StyleClassGenerator";
+        private const string SETTINGS_PATH = "Project/Tools/StyleClassGenerator";
 
         [SettingsProvider]
         public static SettingsProvider Create()
@@ -48,7 +48,6 @@ namespace Tarodev.StyleClassGenerator
 
             var scroll = new ScrollView(ScrollViewMode.Vertical);
             container.Add(scroll);
-
 
             foreach (var config in configs)
             {

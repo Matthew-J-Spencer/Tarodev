@@ -12,5 +12,8 @@
     "generator",
     "uss"
   ],
+  "dependencies": {
+    "com.tarodev.shared": "https://github.com/Matthew-J-Spencer/Tarodev.git?path=Assets/Plugins/Shared"
+  },
   "license": "MIT"
 }

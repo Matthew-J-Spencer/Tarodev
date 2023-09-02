@@ -8,7 +8,7 @@ namespace Tarodev.FileWatcher
 {
     internal static class FileWatcherSettingsProvider
     {
-        private const string SETTINGS_PATH = "Project/FileWatcher";
+        private const string SETTINGS_PATH = "Project/Tools/FileWatcher";
 
         [SettingsProvider]
         public static SettingsProvider Create()
