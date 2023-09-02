@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
@@ -25,24 +26,22 @@ namespace Tarodev.StyleClassGenerator
                 var ussFiles = Directory.GetFiles(targetDirectory, "*.uss", SearchOption.AllDirectories);
 
                 var foundClasses = new HashSet<string>();
+                
+                
+           
+                
                 foreach (var asset in ussFiles)
                 {
                     if (Path.GetExtension(asset).Replace(".", "") != StyleClassGeneratorShared.USS_EXTENSION) continue;
 
-                    using var fileStream = File.OpenRead(asset);
-                    using var streamReader = new StreamReader(fileStream, Encoding.UTF8, true);
-                    while (streamReader.ReadLine() is { } line)
-                    {
-                        if (line.Length == 0) continue;
-                        if (line.StartsWith("@import")) continue;
+                    const string PATTERN = @"\.([a-zA-Z0-9_\-]+)\s*{";
+                    var fileContent = File.ReadAllText(asset);  
+                    var matches = Regex.Matches(fileContent, PATTERN);
 
-                        for (var i = line.IndexOf(CLASS_PREFIX); i > -1; i = line.IndexOf(CLASS_PREFIX, i + 1))
-                        {
-                            var foundClassLine = line[(i + 1)..];
-                            if (char.IsNumber(foundClassLine[0])) continue; // To catch floating point number values
-                            var endIndex = foundClassLine.IndexOfAny(EndChars);
-                            foundClasses.Add(foundClassLine[..endIndex]);
-                        }
+                    foreach (Match match in matches)
+                    {
+                        var className = match.Groups[1].Value;
+                        foundClasses.Add(className);
                     }
                 }
 
