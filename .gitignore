@@ -14,6 +14,7 @@ workspace.xml
 
 Assets/[Dd]ev/
 Assets/[Dd]ev.meta
+Tools
 
 /[Aa]ssets/Plugins/Editor/JetBrains*
 

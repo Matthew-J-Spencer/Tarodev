@@ -4,7 +4,7 @@ using UnityEditor;
 
 namespace Tarodev.FileWatcher
 {
-    [FilePath("File Watcher/FileWatcherConfig", FilePathAttribute.Location.PreferencesFolder)]
+    [FilePath("Tools/File Watcher Config.taro", FilePathAttribute.Location.ProjectFolder)]
     public class FileWatcherScriptable : ScriptableSingleton<FileWatcherScriptable>
     {
         public WatcherConfig Config;

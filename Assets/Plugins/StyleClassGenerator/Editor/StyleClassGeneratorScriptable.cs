@@ -4,6 +4,7 @@ using UnityEditor;
 
 namespace Tarodev.StyleClassGenerator
 {
+    [FilePath("Tools/Style Class Generator.taro", FilePathAttribute.Location.ProjectFolder)]
     public class StyleClassGeneratorScriptable : ScriptableSingleton<StyleClassGeneratorScriptable>
     {
         public bool AutoGenerate = true;
