@@ -5,7 +5,7 @@
     "name": "Tarodev",
     "url": "https://www.youtube.com/tarodev"
   },
-  "version": "0.1.7",
+  "version": "0.1.8",
   "unity": "2022.3",
   "description": "Checks for USS classes in stylesheets and generates strongly-typed constants.",
   "keywords": [

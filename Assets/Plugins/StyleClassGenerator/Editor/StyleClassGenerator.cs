@@ -23,6 +23,12 @@ namespace Tarodev.StyleClassGenerator
                 if (isAutoGenerating && !config.AutoGenerate) continue;
 
                 var targetDirectory = $"{Application.dataPath}/{config.TargetDirectory}";
+                
+                if (!Directory.Exists(targetDirectory))
+                {
+                    Debug.LogWarning($"Style generator cannot resolve path: {targetDirectory}");
+                    continue;
+                }
 
                 var ussFiles = Directory.GetFiles(targetDirectory, "*.uss", SearchOption.AllDirectories);
 
