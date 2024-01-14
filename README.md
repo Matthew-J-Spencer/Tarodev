@@ -1,6 +1,12 @@
 # Tarodev Utilities
 An assortment of Unity utilities
 
+## Steam Schema Generator
+Generates strongly-typed data structures for your steam game in the form of IReadOnlyDictionarys with enum keys.
+### Installation
+Package manager -> Add package from git URL  
+`https://github.com/Matthew-J-Spencer/Tarodev.git?path=Assets/Plugins/SteamGenerator`  
+___
 ## USS File Watcher & Compiler
 Write your UI Toolkit styles in **Sass**, **Less** or **~~Stylus~~** and automatically compile them into usable .uss files.
 ### Installation

@@ -1,0 +1,49 @@
+.container {
+    padding: 10px;
+    height: 100%;
+}
+
+.container > Label {
+    font-size: 19px;
+    margin-bottom: 20px;
+    -unity-font-style: bold;
+}
+
+.config-box {
+    margin: 10px;
+    border-width: 1px;
+    border-radius: 5px;
+    background-color: var(--unity-colors-alternated_rows-background);
+    padding: 10px;
+}
+
+.field-row {
+    flex-direction: row;
+}
+
+.config-box .field-row Label {
+    width: 160px;
+}
+
+
+
+.filler {
+    flex-grow: 1;
+}
+
+.unity-scroll-view__content-viewport {
+    margin-right: 10px;
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: var(--unity-colors-app_toolbar-background);
+}
+
+.btn-row {
+    flex-direction: row;
+    margin: 5px 0;
+}
+
+.btn-row Button {
+    flex-grow: 1;
+    height: 20px;
+}

@@ -1,0 +1,19 @@
+{
+  "name": "com.tarodev.filewatcher",
+  "displayName": "File Watcher",
+  "author": {
+    "name": "Tarodev",
+    "url": "https://www.youtube.com/tarodev"
+  },
+  "version": "0.1.0",
+  "unity": "2022.3",
+  "description": "Serializes your steam game schema (achievements, stats, etc) to strongly-typed dictionaries.",
+  "keywords": [
+    "generator",
+    "steam"
+  ],
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "3.2.1"
+  },
+  "license": "MIT"
+}
