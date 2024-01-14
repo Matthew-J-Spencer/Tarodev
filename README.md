@@ -1,5 +1,6 @@
 # Tarodev Utilities
 An assortment of Unity utilities
+### Leave a ⭐ if you found anything helpful!
 
 ## Unity Auto Save
 Creates periodic saves of the scene you're working on. Similar to git versioning.
