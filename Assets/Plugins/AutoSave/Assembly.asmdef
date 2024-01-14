@@ -1,0 +1,14 @@
+{
+    "name": "AutoSaveAssembly",
+    "rootNamespace": "Tarodev.AutoSave",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

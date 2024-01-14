@@ -1,0 +1,31 @@
+.container {
+    padding: 10px;
+    height: 100%;
+}
+
+.container > Label {
+    font-size: 19px;
+    margin-bottom: 20px;
+    -unity-font-style: bold;
+}
+
+.config-box {
+    margin: 10px;
+    border-width: 1px;
+    border-radius: 5px;
+    background-color: var(--unity-colors-alternated_rows-background);
+    padding: 10px;
+    max-width: 300px;
+}
+
+.config-box .field-row {
+    flex-direction: row;
+}
+
+.config-box .field-row Label {
+    width: 130px;
+}
+
+.config-box .field-row TextField, .config-box .field-row Toggle, .config-box .field-row IntegerField {
+    flex-grow: 1;
+}

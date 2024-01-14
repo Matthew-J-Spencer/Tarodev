@@ -1,6 +1,12 @@
 # Tarodev Utilities
 An assortment of Unity utilities
 
+## Unity Auto Save
+Creates periodic saves of the scene you're working on. Similar to git versioning.
+### Installation
+Package manager -> Add package from git URL  
+`https://github.com/Matthew-J-Spencer/Tarodev.git?path=Assets/Plugins/AutoSave`  
+___
 ## Steam Schema Generator
 Generates strongly-typed data structures for your steam game in the form of IReadOnlyDictionarys with enum keys.
 ### Installation
