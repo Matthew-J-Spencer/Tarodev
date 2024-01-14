@@ -23,9 +23,10 @@ namespace Tarodev.SteamGenerator
 
             var builder = new StringBuilder();
 
+            builder.Append("// This file was auto-generated. DO NOT EDIT!\n");
+            builder.Append("// ReSharper disable InconsistentNaming\n\n");
             builder.Append("using System.Collections.Generic;\n");
             builder.Append("using Tarodev.SteamGenerator;\n");
-            builder.Append("// ReSharper disable InconsistentNaming\n\n");
 
             builder.Append($"namespace {config.Namespace}\n{{\n");
 
