@@ -17,15 +17,17 @@
     padding: 10px;
 }
 
-.field-row {
+.config-box .field-row {
     flex-direction: row;
 }
 
 .config-box .field-row Label {
-    width: 160px;
+   width: 160px;
 }
 
-
+.config-box .field-row TextField {
+    flex-grow: 1;
+}
 
 .filler {
     flex-grow: 1;
