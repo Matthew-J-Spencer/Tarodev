@@ -1,8 +1,12 @@
 {
-    "name": "AutoSaveAssembly",
-    "rootNamespace": "Tarodev.AutoSave",
-    "references": [],
-    "includePlatforms": [],
+    "name": "SteamGeneratorAssembly",
+    "rootNamespace": "Tarodev.SteamGenerator",
+    "references": [
+        "GUID:ffc36a7f749ed6c40a7b39bd3f851d07"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
