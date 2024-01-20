@@ -5,7 +5,7 @@
     "name": "Tarodev",
     "url": "https://www.youtube.com/tarodev"
   },
-  "version": "0.1.1",
+  "version": "0.1.2",
   "unity": "2022.3",
   "description": "Creates periodic saves of the scene you're working on. Similar to git versioning.",
   "keywords": [
