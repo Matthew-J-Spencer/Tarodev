@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using System;
 using UnityEditor;
 
@@ -18,3 +20,5 @@ namespace Tarodev.AutoSave
         public bool Logging;
     }
 }
+
+#endif

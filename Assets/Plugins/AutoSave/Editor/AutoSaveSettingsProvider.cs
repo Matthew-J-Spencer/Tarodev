@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using System;
 using UnityEditor;
 using UnityEngine;
@@ -62,3 +64,5 @@ namespace Tarodev.AutoSave
         private static void OpenSettings() => SettingsService.OpenProjectSettings(SETTINGS_PATH);
     }
 }
+
+#endif

@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using System;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -55,3 +57,5 @@ namespace Tarodev.AutoSave
         }
     }
 }
+
+#endif
